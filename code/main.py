@@ -13,13 +13,13 @@ TEST_RATIO = 0.15
 VAL_RATIO = 0.15
 SPLIT = [0.7, 0.15, 0.15]
 
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 WORKERS = 4
 LEARNING_RATE=0.01
 EMBED_SIZE = 256
-HIDDEN_SIZE = 256
-NUM_LAYERS = 1
-EPOCHS = 65
+HIDDEN_SIZE = 512
+NUM_LAYERS = 3
+EPOCHS = 90
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -34,11 +34,11 @@ def main():
     ])
 
         train_loader, val_loader, test_loader, dataset = get_loader(
-                "../Data/Images/", "../Data/captions.txt", transform=transform, num_workers=WORKERS, 
-                batch_size=BATCH_SIZE, num_workers=WORKERS)
+                "/home/jovyan/work/workspace/CaptionMosaic/Data/Images/", "/home/jovyan/work/workspace/CaptionMosaic/Data/captions.txt", transform=transform, num_workers=WORKERS, 
+                batch_size=BATCH_SIZE)
         vocab_size = len(dataset.vocab)
 
-        model = CNNtoRNN(embed_size=EMBED_SIZE, hidden_size=HIDDEN_SIZE, vocab_size=vocab_size, num_layers=NUM_LAYERS).to(device)
+        model = CNNtoRNN(embed_size=EMBED_SIZE, hidden_size=HIDDEN_SIZE, vocab_size=vocab_size, num_layers=NUM_LAYERS, device=device).to(device)
 
         criterion = nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi['<PAD>']).to(device)
         optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
