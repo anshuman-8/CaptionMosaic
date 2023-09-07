@@ -1,2 +1,3 @@
 /Data/Images
-/models/model.pth
+/models/*
+Data/flickr30k.zip
